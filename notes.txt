@@ -1,0 +1,20 @@
+open a terminal in the server directory
+type "start rmiregistry &", a new window will open, leave this open
+now type "java FrontEnd" in the terminal, this will launch the frontend server and connect it to the registry
+now you can create as many replicas as you want, each in a new terminal window by typing "java Replica n" (with n being a unique number specified by you), each Replica will automatically join the registry and one of them will be assigned as the primary replica
+you can also start the client by opening a new terminal window from the client directory and typing "java Client".
+if this does not work, you will need to compile NewUserInfo and all of the Auction related classes and drag an instance of each to the client directory.
+
+client documentation:
+
+newuser
+arg 1: an email address
+returns a user id. In order to use this userid you must first carry out a challenge and authenticate
+
+challenge
+arg 1: userid
+challenges the server with the respective userid, ensuring the server is legitimate
+
+authenticate
+arg1: userid
+authenticates userid with the server, ensures you are the owner of the userid and allows you to take part in bidding

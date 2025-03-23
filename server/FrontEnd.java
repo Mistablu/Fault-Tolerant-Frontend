@@ -194,6 +194,7 @@ public class FrontEnd implements Auction {
     }
     public static void main(String[] args) {
         Registry registry;
+        System.out.println(System.getProperty("java.version"));
         try {
          FrontEnd s = new FrontEnd();
          String name = "FrontEnd";

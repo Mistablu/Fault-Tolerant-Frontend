@@ -35,10 +35,10 @@ public class Client{
                String name = "FrontEnd";
                Registry registry = LocateRegistry.getRegistry("localhost");
                Auction server = (Auction) registry.lookup(name);
-
+                //gets the listing of an item based on its id
                 if (cmd.equals("getspec")) {
-                  int n = Integer.parseInt(args[1]);
-                  AuctionItem result = server.getSpec(n);
+                  int itemid = Integer.parseInt(args[1]);
+                  AuctionItem result = server.getSpec(itemid);
                   if (result == null)
                     System.out.println("Error, ID not Found.");
                   else {
@@ -55,17 +55,20 @@ public class Client{
                   int result = server.newAuction(n, saleitem);
                   System.out.println(result);
                 }
+                //creates a new user with the given email, a userid will be generated and returned to you
                 else if (cmd.equals("newuser")) {
                   String n = (String)args[1];
                   email = n;
                   userinfo = server.newUser(n);
                   System.out.println("User created, your ID is: "+userinfo.userID);
                 }
+                //lists all items and their current highest bid amount
                 else if (cmd.equals("listitems")) {
                   AuctionItem[] allitems = server.listItems();
                   for (AuctionItem item:allitems)
                     System.out.println("Item: "+item.name+", Current Price: £"+item.highestBid);
                 }
+                //closes an auction
                 else if (cmd.equals("closeauction")) {
                   int n = Integer.parseInt(args[1]);
                   int m = Integer.parseInt(args[2]);
@@ -79,16 +82,19 @@ public class Client{
                   boolean result = server.bid(n, m, b);
                   System.out.println(result);
                 }
+                //challenges the authenticity of the server
                 else if (cmd.equals("challenge")) {
                   int n = Integer.parseInt(args[1]);
                   byte[] signature = server.challenge(n);
                   PublicKey serverKey = readKey();
+                  System.out.println("im trying");
                   byte[] test = "auction".getBytes("UTF8");
                   Signature sig = Signature.getInstance("SHA1WithRSA");
                   sig.initVerify(serverKey);
                   sig.update(test);
                   System.out.println(sig.verify(signature));
                 }
+                //authenticates the credentials of the user
                 else if (cmd.equals("authenticate")) {
                   int n = Integer.parseInt(args[1]);
                   Signature sig = Signature.getInstance("SHA1WithRSA");
@@ -100,6 +106,7 @@ public class Client{
                   boolean result = server.authenticate(n, signatureBytes);
                   System.out.println(result);
                 }
+                //returns the id of the current primary replica (run another command to update this value)
                 else if (cmd.equals("getprimary")) {
                   int id = server.getPrimaryReplicaID();
                   System.out.println("ID is "+id);
